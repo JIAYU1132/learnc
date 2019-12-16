@@ -14,7 +14,7 @@ int Menu() {
 	printf("1. 开始游戏\n");
 	printf("0. 结束游戏\n");
 	printf("======================\n");
-	printf("请输入您的选项: ");
+	printf("请输入您的选择: ");
 	int choice = 0;
 	scanf("%d", &choice);
 	return choice;
@@ -24,8 +24,8 @@ void Init(char showMap[MAX_ROW][MAX_COL],
 	char mineMap[MAX_ROW][MAX_COL]) {
 	// 1. 先初始化 showMap, 把所有的位置都设成 *
 	memset(showMap, '*', MAX_ROW * MAX_COL);
-	// 2. 再初始化 mineMap, 先把里面所有的位置都设成 '0',
-	//    然后随机找出 10 个位置设成地雷
+	// 2. 再初始化 mineMap, 先把里面所有的位置都设成 '0'
+	//再随机找出 10 个位置设成地雷
 	srand((unsigned int)time(0));
 	memset(mineMap, '0', MAX_ROW * MAX_COL);
 	int count = MINE_COUNT;
@@ -33,7 +33,6 @@ void Init(char showMap[MAX_ROW][MAX_COL],
 		int row = rand() % MAX_ROW;
 		int col = rand() % MAX_COL;
 		if (mineMap[row][col] == '1') {
-			// 这里已经是雷了! 重新随机
 			continue;
 		}
 		mineMap[row][col] = '1';
@@ -42,7 +41,7 @@ void Init(char showMap[MAX_ROW][MAX_COL],
 }
 
 void Print(char showMap[MAX_ROW][MAX_COL]) {
-	// 1. 先打印最上方一行的坐标
+	// 1. 打印最上方一行的坐标
 	printf("   | ");
 	for (int col = 0; col < MAX_COL; col++) {
 		printf("%d ", col);
@@ -58,11 +57,9 @@ void Print(char showMap[MAX_ROW][MAX_COL]) {
 		printf("\n");
 	}
 }
-
-// row 和 col 都是输出型参数
 void Input(char showMap[MAX_ROW][MAX_COL], int* row, int* col) {
 	while (1) {
-		printf("请输入要翻开位置的坐标(row, col): ");
+		printf("请输入要翻开位置的坐标: ");
 		scanf("%d %d", row, col);
 		if (*row < 0 || *row >= MAX_ROW || *col < 0 || *col >= MAX_COL) {
 			// 输入了非法的数据
@@ -89,10 +86,9 @@ int CheckMine(char mineMap[MAX_ROW][MAX_COL],
 
 
 int CheckLastBlank(int* count) {
-	// 思路是记录当前翻开的格子的数量. 
+	// 记录当前翻开的格子的数量. 
 	// 如果这个格子的数量已经达到了 71 个, 就说明游戏胜利
-	// 进入函数就应该增加 count
-	*count += 1;
+	*count += 1;	// 进入函数就应该增加 count
 	if (*count == 71) {
 		return 1;
 	}
@@ -120,14 +116,11 @@ void Update(char showMap[MAX_ROW][MAX_COL],
 			}
 		}
 	}
-
-	// 需要把数字转成对应的字符
-	// ASCII 中, 字符 0 1 2 3 .... 连续的
 	showMap[row][col] = count + '0';
 }
 
 void Game() {
-	// 1. 先创建两个地图, 并初始化
+	// 1. 创建两个地图, 并初始化
 	char showMap[MAX_ROW][MAX_COL] = { 0 };
 	char mineMap[MAX_ROW][MAX_COL] = { 0 };
 	int count = 0;
